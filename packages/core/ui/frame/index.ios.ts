@@ -1,5 +1,6 @@
 //Types
-import { iOSFrame as iOSFrameDefinition, BackstackEntry, NavigationTransition } from '.';
+import { iOSFrame as iOSFrameDefinition, NavigationTransition } from '.';
+import type { BackstackEntry } from './frame-interfaces';
 import { FrameBase, NavigationType } from './frame-common';
 import { Page } from '../page';
 import { View } from '../core/view';
@@ -97,7 +98,7 @@ export class Frame extends FrameBase {
 	// !!! THIS PROFILE DECORATOR CREATES A CIRCULAR DEPENDENCY
 	// !!! BECAUSE THE PARAMETER TYPE IS EVALUATED WITH TYPEOF
 	@profile
-	public _navigateCore(backstackEntry: any) {
+	public _navigateCore(backstackEntry: BackstackEntry) {
 		super._navigateCore(backstackEntry);
 
 		const viewController: UIViewController = backstackEntry.resolvedPage.ios;
@@ -507,7 +508,7 @@ class UINavigationControllerImpl extends UINavigationController {
 		}
 	}
 
-	private animateWithDuration(navigationTransition: NavigationTransition, nativeTransition: UIViewAnimationTransition, transitionType: string, baseCallback: Function): void {
+	private animateWithDuration(navigationTransition: NavigationTransition, nativeTransition: UIViewAnimationTransition, transitionType: string, baseCallback: () => void): void {
 		const duration = navigationTransition.duration ? navigationTransition.duration / 1000 : CORE_ANIMATION_DEFAULTS.duration;
 		const curve = _getNativeCurve(navigationTransition);
 
